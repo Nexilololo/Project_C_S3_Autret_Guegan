@@ -35,3 +35,13 @@ t_cell* createCell(int vertex, float weight) {
     cell->next = NULL;
     return cell;
 }
+
+void addcell(t_list* l,t_cell* c){
+    if (l->head==NULL) {
+        l->head = c;
+    }
+    else {
+        c->next=l->head;
+        l->head=c;
+    }
+};

@@ -22,4 +22,6 @@ typedef struct adjlist{
 t_cell* createCell(int vertex, float weight);
 
 
+void addcell(t_list* l,t_cell* c);
+
 #endif
