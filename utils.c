@@ -36,6 +36,12 @@ t_cell* createCell(int vertex, float weight) {
     return cell;
 }
 
+t_list CreateEmptyList(){
+    t_list newList;
+    newList.head = NULL;
+    return newList;
+}
+
 void addcell(t_list* l,t_cell* c){
     if (l->head==NULL) {
         l->head = c;
@@ -45,3 +51,4 @@ void addcell(t_list* l,t_cell* c){
         l->head=c;
     }
 };
+
