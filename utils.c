@@ -51,4 +51,13 @@ void addcell(t_list* l,t_cell* c){
         l->head=c;
     }
 };
+void display_list(t_list l,int num) {
+    printf("List for vertex %d:[head @] ->",num);
+    t_cell* curr=l.head;
+    while (curr->next!=NULL) {
+        printf(" (%d, %.2f) @->",curr->vertex,curr->weight);
+        curr=curr->next;
+    }
+    printf(" (%d, %.2f)",curr->vertex,curr->weight);
+}
 
