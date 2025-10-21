@@ -14,5 +14,9 @@ struct s_list {
 typedef struct s_list t_list;
 
 
+typedef struct adjlist{
+    t_list* list;
+    int list_number;
+};
 
 #endif
