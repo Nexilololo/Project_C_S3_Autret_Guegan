@@ -27,3 +27,11 @@ static char *getID(int i)
 
     return buffer;
 }
+
+t_cell* createCell(int vertex, float weight) {
+    t_cell* cell = (t_cell*)malloc(sizeof(t_cell));
+    cell->vertex = vertex;
+    cell->weight = weight;
+    cell->next = NULL;
+    return cell;
+}

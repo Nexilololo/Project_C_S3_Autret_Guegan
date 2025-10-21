@@ -19,4 +19,7 @@ typedef struct adjlist{
     int list_number;
 };
 
+t_cell* createCell(int vertex, float weight);
+
+
 #endif
