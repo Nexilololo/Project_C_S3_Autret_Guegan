@@ -1,7 +1,11 @@
 #include <stdio.h>
+#include <string.h>
 
+#include "utils.h"
 
 int main() {
-    printf("Hello, World!\n");
+    t_adjlist g = readGraph("../data/exemple_valid_step3.txt");
+    display_adjlist(g);
+    createMermaidFile(g, "../data/mermaid_file.txt");
     return 0;
 }

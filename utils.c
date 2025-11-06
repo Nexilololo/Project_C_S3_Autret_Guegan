@@ -51,67 +51,65 @@ void addcell(t_list* l,t_cell* c){
         l->head=c;
     }
 };
+
 void display_list(t_list l,int num) {
-    printf("List for vertex %d:[head @] ->",num);
+    printf("\nList for vertex %d:[head @]",num);
     t_cell* curr=l.head;
-    while (curr->next!=NULL) {
-        printf(" (%d, %.2f) @->",curr->vertex,curr->weight);
+    if (curr!=NULL) {
+        printf(" -> (%d, %.2f)",curr->vertex,curr->weight);
         curr=curr->next;
+        while (curr!=NULL) {
+            printf(" @-> (%d, %.2f)",curr->vertex,curr->weight);
+            curr=curr->next;
+        }
     }
-    printf(" (%d, %.2f)",curr->vertex,curr->weight);
 }
-t_adjlist* createAdjlist(int num) {
-    t_adjlist* adj = (t_adjlist*)malloc(sizeof(t_adjlist));
-    adj->list_number = num;
-    adj->list = (t_list*)malloc(num * sizeof(t_list));
 
-    for (int i = 0; i < num; i++) {
-        adj->list[i].head = NULL;
-    }
-
+t_adjlist createEmptyAdjlist(int nbvertex) {
+    t_adjlist adj;
+    adj.list_number = nbvertex;
+    adj.list= (t_list*)calloc(nbvertex, sizeof(t_list));
     return adj;
 }
 
-void display_adjlist(t_adjlist* adj) {
-    for (int i = 0; i < adj->list_number; i++) {
-        display_list(adj->list[i],i);
+void display_adjlist(t_adjlist adj) {
+    for (int i = 0; i < adj.list_number; i++) {
+        // i + 1 for the graph later on
+        display_list(adj.list[i], i + 1);
     }
 }
 
 t_adjlist readGraph(const char *filename) {
-    FILE *file = fopen(filename, "rt"); // read-only, text
+    FILE *file = fopen(filename, "rt");
     int nbvert, start, end;
     float proba;
-    t_cell curr;
+
     if (file == NULL)
     {
         perror("Could not open file for reading");
         exit(EXIT_FAILURE);
     }
-    // first line contains number of vertices
+
     if (fscanf(file, "%d", &nbvert) != 1)
     {
         perror("Could not read number of vertices");
         exit(EXIT_FAILURE);
     }
-    t_adjlist* adjlist = createAdjlist(nbvert);
+
+    t_adjlist adjlist = createEmptyAdjlist(nbvert);
+
     while (fscanf(file, "%d %d %f", &start, &end, &proba) == 3)
     {
-        // we obtain, for each line of the file, the values
-        // start, end and proba
-        //Add the edge that runs from 'start' to ‘end’ with the
-        //probability 'proba' to the adjacency list
-        if (adjlist->list[start].head==NULL) {
-            adjlist->list[start].head = createCell(end, proba);
-        }
-        else {
-            t_cell* temp = createCell(end, proba);
-            temp->next =adjlist->list[start].head;
-            adjlist->list[start].head = temp;
-        }
-        }
+        int index = start - 1;
+
+        t_cell* new_cell = createCell(end, proba);
+
+        new_cell->next = adjlist.list[index].head;
+        adjlist.list[index].head = new_cell;
+    }
+
     fclose(file);
-    return *adjlist;
+    return adjlist;
 }
 
 void checkMarkovGraph(t_adjlist* adjlist){
@@ -139,4 +137,34 @@ void checkMarkovGraph(t_adjlist* adjlist){
     else{
         printf("The graph is not a Markov graph.\n");
     }
+}
+
+void createMermaidFile(t_adjlist graph, char *filename) {
+    FILE *f = fopen(filename, "w");
+    if (!f) {
+        perror("Error creating output file");
+        exit(EXIT_FAILURE);
+    }
+
+    fprintf(f, "---\nconfig:\n   layout: elk\n   theme: neo\n   look: neo\n---\n\nflowchart LR\n");
+
+    // Here we declare the vertexes with their respective letters
+    for (int i = 0; i < graph.list_number; i++) {
+        fprintf(f, "%s((%d))\n", getID(i + 1), i + 1);
+    }
+
+    fprintf(f, "\n");
+
+    // Loop to write the edges of the mermaid file
+    for (int i = 0; i < graph.list_number; i++) {
+        t_cell *current = graph.list[i].head;
+        while (current != NULL) {
+            fprintf(f, "%s -->|%.2f|",getID(i + 1),current->weight);
+            fprintf(f,"%s\n",getID(current->vertex));
+            current = current->next;
+        }
+    }
+
+    fclose(f);
+    printf("\nMermaid file successfully created to %s\n", filename);
 }
