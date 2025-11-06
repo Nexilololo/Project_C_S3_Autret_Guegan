@@ -60,4 +60,56 @@ void display_list(t_list l,int num) {
     }
     printf(" (%d, %.2f)",curr->vertex,curr->weight);
 }
+t_adjlist* createAdjlist(int num) {
+    t_adjlist* adj = (t_adjlist*)malloc(sizeof(t_adjlist));
+    adj->list_number = num;
+    adj->list = (t_list*)malloc(num * sizeof(t_list));
 
+    for (int i = 0; i < num; i++) {
+        adj->list[i].head = NULL;
+    }
+
+    return adj;
+}
+
+void display_adjlist(t_adjlist* adj) {
+    for (int i = 0; i < adj->list_number; i++) {
+        display_list(adj->list[i],i);
+    }
+}
+
+t_adjlist readGraph(const char *filename) {
+    FILE *file = fopen(filename, "rt"); // read-only, text
+    int nbvert, start, end;
+    float proba;
+    t_cell curr;
+    if (file == NULL)
+    {
+        perror("Could not open file for reading");
+        exit(EXIT_FAILURE);
+    }
+    // first line contains number of vertices
+    if (fscanf(file, "%d", &nbvert) != 1)
+    {
+        perror("Could not read number of vertices");
+        exit(EXIT_FAILURE);
+    }
+    t_adjlist* adjlist = createAdjlist(nbvert);
+    while (fscanf(file, "%d %d %f", &start, &end, &proba) == 3)
+    {
+        // we obtain, for each line of the file, the values
+        // start, end and proba
+        //Add the edge that runs from 'start' to ‘end’ with the
+        //probability 'proba' to the adjacency list
+        if (adjlist->list[start].head==NULL) {
+            adjlist->list[start].head = createCell(end, proba);
+        }
+        else {
+            t_cell* temp = createCell(end, proba);
+            temp->next =adjlist->list[start].head;
+            adjlist->list[start].head = temp;
+        }
+        }
+    fclose(file);
+    return *adjlist;
+}

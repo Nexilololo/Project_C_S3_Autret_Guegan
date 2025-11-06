@@ -24,5 +24,7 @@ t_list CreateEmptyList();
 void addcell(t_list* l,t_cell* c);
 void display_list(t_list l,int num);
 void display_adjlist(t_adjlist l);
-
+t_adjlist* createAdjlist(int num);
+void display_adjlist(t_adjlist* adj);
+t_adjlist readGraph(const char *filename);
 #endif
