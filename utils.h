@@ -27,4 +27,5 @@ void display_adjlist(t_adjlist l);
 t_adjlist* createAdjlist(int num);
 void display_adjlist(t_adjlist* adj);
 t_adjlist readGraph(const char *filename);
+void checkMarkovGraph(t_adjlist* adjlist);
 #endif

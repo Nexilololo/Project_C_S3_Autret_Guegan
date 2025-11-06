@@ -113,3 +113,30 @@ t_adjlist readGraph(const char *filename) {
     fclose(file);
     return *adjlist;
 }
+
+void checkMarkovGraph(t_adjlist* adjlist){
+    int confirmation = 1;
+    for(int i = 0; i < adjlist->list_number; i++){
+        double suma = 0;
+        t_cell* curr = adjlist->list[i].head;
+        if(curr == NULL){
+            printf("The %d vertex has no transitions.\n", i + 1);
+            confirmation = 0;
+            continue;
+        }
+        while(curr != NULL){
+            suma += curr->weight;
+            curr = curr->next;
+        }
+        if(suma < 0.99 || suma > 1.01){
+            printf("the sum of the probabilities of vertex %d is %.2f.\n", i + 1, suma);
+            confirmation = 0;
+        }
+    }
+    if(confirmation){
+        printf("The graph is a Markov graph.\n");
+    }
+    else{
+        printf("The graph is not a Markov graph.\n");
+    }
+}
