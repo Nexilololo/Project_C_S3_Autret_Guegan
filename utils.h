@@ -19,6 +19,23 @@ typedef struct adjlist{
     int list_number;
 }t_adjlist;
 
+typedef struct tarjan_vertex {
+    int ID;
+    int number;
+    int access_number;
+    int indicator;
+}t_tarjan_vertex;
+
+typedef struct tarjan_class {
+    t_tarjan_vertex * vertex;
+    char name[10];
+}t_class;
+
+typedef struct tarjan_partition {
+    t_class * partition;
+}t_partition;
+
+
 t_cell* createCell(int vertex, float weight);
 t_list CreateEmptyList();
 void addcell(t_list* l,t_cell* c);
@@ -28,4 +45,7 @@ t_adjlist createEmptyAdjlist(int num);
 t_adjlist readGraph(const char *filename);
 void checkMarkovGraph(t_adjlist* adjlist);
 void createMermaidFile(t_adjlist graph, char *filename);
+
+t_partition tarjanAlgorithm(t_adjlist graph);
+t_tarjan_vertex * createTarjanList(t_adjlist graph);
 #endif

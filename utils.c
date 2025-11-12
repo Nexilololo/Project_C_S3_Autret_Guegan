@@ -167,3 +167,18 @@ void createMermaidFile(t_adjlist graph, char *filename) {
     fclose(f);
     printf("\nMermaid file successfully created to %s\n", filename);
 }
+
+t_partition tarjanAlgorithm(t_adjlist graph) {
+
+}
+
+t_tarjan_vertex * createTarjanList(t_adjlist graph) {
+    t_tarjan_vertex* t_list = (t_tarjan_vertex*)calloc(graph.list_number, sizeof(t_tarjan_vertex));
+    for (int i = 0; i < graph.list_number; i++) {
+        t_list[i].ID = i + 1;
+        t_list[i].number = -1;
+        t_list[i].access_number = -1;
+        t_list[i].indicator = 0;
+    }
+    return t_list;
+}
