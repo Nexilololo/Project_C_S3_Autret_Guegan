@@ -1,7 +1,8 @@
 #include "stack.h"
 
-t_cell* createCell(int value){
-    t_cell* new =(t_cell*)malloc(sizeof(t_cell));
+
+st_cell* createCell(int value){
+    st_cell* new =(st_cell*)malloc(sizeof(st_cell));
     new->value = value;
     new->next = NULL;
     return new;
@@ -24,14 +25,14 @@ int isEmptyStack(t_stack stack){
 }
 
 void push(t_stack* stack, int value){
-    t_cell* new = createCell(value);
+    st_cell* new = createCell(value);
     new->next = stack->head;
     stack->head = new;
     displayStack(*stack);
 }
 
 int pop(t_stack* stack){
-    t_cell* temp = stack->head;
+    st_cell* temp = stack->head;
     int result;
     if(stack->head == NULL){
         printf("Stack is empty. Return -1 by default.\n");
@@ -48,7 +49,7 @@ int pop(t_stack* stack){
 }
 
 void displayStack(t_stack stack){
-    t_cell* curr = stack.head;
+    st_cell* curr = stack.head;
     printf("[ @ ] -> ");
     while(curr != NULL){
         printf("[ %d | @ ] -> ", curr->value);

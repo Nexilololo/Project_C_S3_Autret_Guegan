@@ -1,6 +1,8 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
+#include "stack.h"
+
 struct s_cell {
     int vertex;
     float weight;
@@ -48,4 +50,6 @@ void createMermaidFile(t_adjlist graph, char *filename);
 
 t_partition tarjanAlgorithm(t_adjlist graph);
 t_tarjan_vertex * createTarjanList(t_adjlist graph);
+void parcoursTarjan(int *num, t_adjlist *graph, t_stack *stack, t_tarjan_vertex *vertex, t_partition *partition);
+
 #endif
