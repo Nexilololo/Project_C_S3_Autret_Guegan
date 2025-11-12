@@ -1,6 +1,5 @@
 #include "stack.h"
 
-//Funcion para crear un stack vacio
 t_cell* createCell(int value){
     t_cell* new =(t_cell*)malloc(sizeof(t_cell));
     new->value = value;
@@ -15,7 +14,6 @@ t_stack createEmptyStack(){
     return stack;
 }
 
-//Funcion para verificar si es un stack vacion 
 int isEmptyStack(t_stack stack){
     if(stack.head == NULL){
         return 1;
@@ -25,7 +23,6 @@ int isEmptyStack(t_stack stack){
     }
 }
 
-//Funcion para agregar un valor al stack 
 void push(t_stack* stack, int value){
     t_cell* new = createCell(value);
     new->next = stack->head;
@@ -33,12 +30,11 @@ void push(t_stack* stack, int value){
     displayStack(*stack);
 }
 
-//Funcion para quitar un valor al stack
 int pop(t_stack* stack){
     t_cell* temp = stack->head;
     int result;
     if(stack->head == NULL){
-        printf("El stack esta vacion (retornando -1 como valor predeterminado)\n");
+        printf("Stack is empty. Return -1 by default.\n");
         displayStack(*stack);
         return -1;
     }
@@ -51,7 +47,6 @@ int pop(t_stack* stack){
     }
 }
 
-//Funcion para imprimir el stack
 void displayStack(t_stack stack){
     t_cell* curr = stack.head;
     printf("[ @ ] -> ");
@@ -62,10 +57,9 @@ void displayStack(t_stack stack){
     printf("NULL\n");
 }
 
-//Funcion para consultar un valor 
 int top(t_stack stack){
     if (isEmptyStack(stack) == 1){
-        printf("Stack vacio retornando -1 como valor predeterminado\n");
+        printf("Stack is empty. Return -1 by default.\n");
         return -1;
     }
     return stack.head->value;
