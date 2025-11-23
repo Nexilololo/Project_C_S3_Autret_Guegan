@@ -191,3 +191,50 @@ void parcoursTarjan(int *num, t_adjlist *graph, t_stack *stack, t_tarjan_vertex 
     vertex->indicator = 1;
     //Ended here...
 }
+
+int findClassOfVertex(t_partition *partition, int vertexID)
+{
+    for (int i = 0; i < partition->classes_number; i++) {
+        t_class *c = &partition->partition[i];
+
+        for (int j = 0; j < c->vertex_number; j++) {
+            if (c->vertex[j].ID == vertexID) {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
+void analyzeGraphProperties(t_adjlist graph, t_partition partition) {
+    int num_classes = partition.classes_number;
+    for(int c = 0; c < num_classes; c++) {
+        t_class *cls = &partition.partition[c];
+        int is_transient = 0;
+        for(int v = 0; v < cls->vertex_number; v++) {
+            int vertexID = cls->vertex[v].ID;
+            t_cell *curr = graph.list[vertexID - 1].head;
+            while(curr != NULL) {
+                int dest_class = findClassOfVertex(&partition, curr->vertex);
+                if(dest_class != c) {
+                    is_transient = 1;
+                    break;
+                }
+                curr = curr->next;
+            }
+            if(is_transient) break;
+        }
+        if(is_transient) {
+            printf("Class %s is transient\n", cls->name);
+        } else {
+            printf("Class %s is persistent\n", cls->name);
+            if(cls->vertex_number == 1) {
+                printf(" -> Vertex %d is absorbing\n", cls->vertex[0].ID);
+            }
+        }
+    }
+    if(num_classes == 1)
+        printf("The Markov graph is irreducible\n");
+    else
+        printf("The Markov graph is not irreducible\n");
+}

@@ -30,11 +30,13 @@ typedef struct tarjan_vertex {
 
 typedef struct tarjan_class {
     t_tarjan_vertex * vertex;
+    int vertex_number;
     char name[10];
 }t_class;
 
 typedef struct tarjan_partition {
     t_class * partition;
+    int classes_number;
 }t_partition;
 
 
@@ -51,5 +53,8 @@ void createMermaidFile(t_adjlist graph, char *filename);
 t_partition tarjanAlgorithm(t_adjlist graph);
 t_tarjan_vertex * createTarjanList(t_adjlist graph);
 void parcoursTarjan(int *num, t_adjlist *graph, t_stack *stack, t_tarjan_vertex *vertex, t_partition *partition);
+
+int findClassOfVertex(t_partition *partition, int vertexID);
+void analyzeGraphProperties(t_adjlist graph, t_partition partition);
 
 #endif
