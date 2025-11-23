@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "utils.h"
 
@@ -169,7 +170,35 @@ void createMermaidFile(t_adjlist graph, char *filename) {
 }
 
 t_partition tarjanAlgorithm(t_adjlist graph) {
+    t_partition partition;
+    partition.classes_number = 0;
+    partition.partition = NULL;
 
+    int n = graph.list_number;
+    int num = 0;
+
+    // 1. Create and initialize the array of Tarjan vertices
+    t_tarjan_vertex *vertices = (t_tarjan_vertex *)malloc(n * sizeof(t_tarjan_vertex));
+    for (int i = 0; i < n; i++) {
+        vertices[i].ID = i + 1; // Assuming IDs start at 1
+        vertices[i].number = -1;
+        vertices[i].access_number = -1;
+        vertices[i].indicator = 0;
+    }
+
+    // 2. Create the stack
+    t_stack stack = createEmptyStack();
+
+    // 3. Main loop: run parcours on unvisited vertices
+    for (int i = 0; i < n; i++) {
+        if (vertices[i].number == -1) {
+            parcoursTarjan(i, &num, &graph, &stack, vertices, &partition);
+        }
+    }
+
+    free(vertices);
+
+    return partition;
 }
 
 t_tarjan_vertex * createTarjanList(t_adjlist graph) {
@@ -184,12 +213,59 @@ t_tarjan_vertex * createTarjanList(t_adjlist graph) {
 }
 
 void parcoursTarjan(int curr, int *num, t_adjlist *graph, t_stack *stack, t_tarjan_vertex *vertex, t_partition *partition) {
-    vertex->number = *num;
-    vertex->access_number = *num;
-    num = (*num)++;
-    push(stack, vertex->ID);
-    vertex->indicator = 1;
-    //Ended here...
+    vertex[curr].number = *num;
+    vertex[curr].access_number = *num;
+    (*num)++;
+
+    push(stack, curr);
+    vertex[curr].indicator = 1; // 1 means "is in the stack"
+
+    t_cell *edge = graph->list[curr].head;
+    while (edge != NULL) {
+        int neighbor_index = edge->vertex - 1;
+
+        if (vertex[neighbor_index].number == -1) {
+            // If neighbor has not been visited yet: recurse
+            parcoursTarjan(neighbor_index, num, graph, stack, vertex, partition);
+
+            if (vertex[neighbor_index].access_number < vertex[curr].access_number) {
+                vertex[curr].access_number = vertex[neighbor_index].access_number;
+            }
+        }
+        else if (vertex[neighbor_index].indicator == 1) {
+            if (vertex[neighbor_index].number < vertex[curr].access_number) {
+                vertex[curr].access_number = vertex[neighbor_index].number;
+            }
+        }
+        edge = edge->next;
+    }
+
+    if (vertex[curr].access_number == vertex[curr].number) {
+        int class_idx = partition->classes_number;
+        partition->partition = (t_class *)realloc(partition->partition, (class_idx + 1) * sizeof(t_class));
+
+        partition->partition[class_idx].vertex = NULL;
+        partition->partition[class_idx].vertex_number = 0;
+        sprintf(partition->partition[class_idx].name, "C%d", class_idx + 1);
+
+        int popped_node_idx;
+        do {
+            popped_node_idx = pop(stack);
+            vertex[popped_node_idx].indicator = 0;
+
+            int v_count = partition->partition[class_idx].vertex_number;
+            partition->partition[class_idx].vertex = (t_tarjan_vertex *)realloc(
+                partition->partition[class_idx].vertex,
+                (v_count + 1) * sizeof(t_tarjan_vertex)
+            );
+
+            partition->partition[class_idx].vertex[v_count] = vertex[popped_node_idx];
+            partition->partition[class_idx].vertex_number++;
+
+        } while (popped_node_idx != curr);
+
+        partition->classes_number++;
+    }
 }
 
 int findClassOfVertex(t_partition *partition, int vertexID)
