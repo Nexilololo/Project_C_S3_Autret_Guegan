@@ -1,20 +1,23 @@
 #ifndef __HASSE_H__
 #define __HASSE_H__
 
+#include "utils.h"
+
 typedef struct s_class_link {
-    int start_class;
-    int end_class;
-} t_class_link;
+    int from;
+    int to;
+} t_link;
 
-
+// Structure for the array of links
 typedef struct s_link_array {
-    t_class_link *links;
-    int count;
+    t_link *links;
+    int log_size;
 } t_link_array;
 
 
 void removeTransitiveLinks(t_link_array *p_link_array);
 
+int isLinkPresent(t_link_array *link_array, int start, int end);
 t_link_array getHasseLinks(t_adjlist graph, t_partition partition);
 void createHasseMermaid(t_partition partition, t_link_array links, char *filename);
 /**
