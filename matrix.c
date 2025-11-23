@@ -11,24 +11,34 @@ t_matrix createZeroMatrix(int n){
     return M;
 }
 
+void freeMatrix(t_matrix *M) {
+    if (M->data != NULL) {
+        for (int i = 0; i < M->rows; i++) {
+            free(M->data[i]);
+        }
+        free(M->data);
+        M->data = NULL;
+    }
+}
+
 t_matrix createTransitionMatrix(t_adjlist graph){
     int n = graph.list_number;
-    t_matrix M =  createZeroMatrix(n);
+    t_matrix M = createZeroMatrix(n);
     for(int i = 0; i < n; i++){
         t_cell *curr = graph.list[i].head;
         while(curr != NULL){
-            int j = curr->vertex -1;
-            M.data[i][j] = curr -> weight;
+            int j = curr->vertex - 1;
+            M.data[i][j] = curr->weight;
             curr = curr->next;
         }
     }
     return M;
 }
 
-void copyMatrix(t_matrix *new, t_matrix old){
-    for(int i = 0; i < old.rows; i++){
-        for(int j = 0; j < old.cols; j++){
-            new->data[i][j] = old.data[i][j];
+void copyMatrix(t_matrix *dest, t_matrix src){
+    for(int i = 0; i < src.rows; i++){
+        for(int j = 0; j < src.cols; j++){
+            dest->data[i][j] = src.data[i][j];
         }
     }
 }
@@ -67,17 +77,16 @@ void printMatrix(t_matrix M){
 
 t_matrix subMatrix(t_matrix matrix, t_partition part, int compo_index){
     t_class currclass = part.partition[compo_index];
-    int n =currclass.vertex_number;
+    int n = currclass.vertex_number;
     t_matrix sub = createZeroMatrix(n);
+
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            float original_row_index = currclass.vertex[i].ID;
-            double original_col_index = currclass.vertex[j].ID;
-
+            int original_row_index = currclass.vertex[i].ID - 1;
+            int original_col_index = currclass.vertex[j].ID - 1;
 
             sub.data[i][j] = matrix.data[original_row_index][original_col_index];
         }
     }
-
     return sub;
 }

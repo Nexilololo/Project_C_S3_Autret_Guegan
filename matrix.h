@@ -17,6 +17,7 @@ void copyMatrix(t_matrix *dest, t_matrix src);
 t_matrix multiplyMatrix(t_matrix A, t_matrix B);
 double diffMatrix(t_matrix A, t_matrix B);
 void printMatrix(t_matrix M);
+void freeMatrix(t_matrix *M);
 /**
 * @brief Extracts a submatrix corresponding to a specific
 component of a graph partition.
