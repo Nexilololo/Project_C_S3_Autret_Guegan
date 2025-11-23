@@ -52,7 +52,7 @@ void createMermaidFile(t_adjlist graph, char *filename);
 
 t_partition tarjanAlgorithm(t_adjlist graph);
 t_tarjan_vertex * createTarjanList(t_adjlist graph);
-void parcoursTarjan(int curr, int *num, t_adjlist *graph, t_stack *stack, t_tarjan_vertex *vertex, t_partition *partition);
+void parcoursTarjan(int *num, t_adjlist *graph, t_stack *stack, t_tarjan_vertex *vertex, t_partition *partition);
 
 int findClassOfVertex(t_partition *partition, int vertexID);
 void analyzeGraphProperties(t_adjlist graph, t_partition partition);
