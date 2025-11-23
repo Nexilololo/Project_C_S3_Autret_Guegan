@@ -183,7 +183,7 @@ t_tarjan_vertex * createTarjanList(t_adjlist graph) {
     return t_list;
 }
 
-void parcoursTarjan(int *num, t_adjlist *graph, t_stack *stack, t_tarjan_vertex *vertex, t_partition *partition) {
+void parcoursTarjan(int curr, int *num, t_adjlist *graph, t_stack *stack, t_tarjan_vertex *vertex, t_partition *partition) {
     vertex->number = *num;
     vertex->access_number = *num;
     num = (*num)++;
