@@ -6,7 +6,7 @@
 
 typedef struct st_cell{
     int value;
-    struct s_cell* next;
+    struct st_cell* next;
 }st_cell;
 
 typedef struct s_stack{
@@ -15,7 +15,7 @@ typedef struct s_stack{
 
 int isEmptyStack(t_stack stack);
 t_stack createEmptyStack();
-st_cell* createCell(int value);
+st_cell* createStackCell(int value);
 void push(t_stack* stack, int value);
 int pop(t_stack* stack);
 void displayStack(t_stack stack);

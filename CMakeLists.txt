@@ -4,6 +4,10 @@ project(2526_TI301_PJT C)
 set(CMAKE_C_STANDARD 11)
 
 add_executable(TI_301_PJT
-        main.c utils.c
-        stack.c)
+        main.c
+        utils.c
+        stack.c
+        hasse.c
+        matrix.c
+)
 

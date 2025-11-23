@@ -1,7 +1,7 @@
 #include "stack.h"
 
 
-st_cell* createCell(int value){
+st_cell* createStackCell(int value){
     st_cell* new =(st_cell*)malloc(sizeof(st_cell));
     new->value = value;
     new->next = NULL;
@@ -25,7 +25,7 @@ int isEmptyStack(t_stack stack){
 }
 
 void push(t_stack* stack, int value){
-    st_cell* new = createCell(value);
+    st_cell* new = createStackCell(value);
     new->next = stack->head;
     stack->head = new;
     displayStack(*stack);
