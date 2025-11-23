@@ -64,3 +64,20 @@ void printMatrix(t_matrix M){
         printf("\n");
     }
 }
+
+t_matrix subMatrix(t_matrix matrix, t_partition part, int compo_index){
+    t_class currclass = part.partition[compo_index];
+    int n =currclass.vertex_number;
+    t_matrix sub = createZeroMatrix(n);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            float original_row_index = currclass.vertex[i].ID;
+            double original_col_index = currclass.vertex[j].ID;
+
+
+            sub.data[i][j] = matrix.data[original_row_index][original_col_index];
+        }
+    }
+
+    return sub;
+}
